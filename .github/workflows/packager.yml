@@ -2,19 +2,19 @@ name: Build iOS Panel
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - name: Setup Theos
         run: |
-          bash -c "$(curl -fsSL https://githubusercontent.com)"
+          bash -c "$(curl -fSSL https://githubusercontent.com)"
           echo "THEOS=~/theos" >> $GITHUB_ENV
       - name: Build Package
         run: |
           cd template
-          make package FINALPACKAGE=1 THEOS=$THEOS
+          make package FINALPACKAGE=1 THEOS=~/theos
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: iOS-Mod-Panel
-          path: template/packages/*.deb
+          path: template/*.deb
