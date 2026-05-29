@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Menu.h"
+#include <string>
 
 @interface Menu ()
 
@@ -49,7 +50,23 @@ Switches *switches = [Switches alloc];
 
 
 -(id)initWithTitle:(NSString *)title_ titleColor:(UIColor *)titleColor_ titleFont:(NSString *)titleFont_ credits:(NSString *)credits_ headerColor:(UIColor *)headerColor_ switchOffColor:(UIColor *)switchOffColor_ switchOnColor:(UIColor *)switchOnColor_ switchTitleFont:(NSString *)switchTitleFont_ switchTitleColor:(UIColor *)switchTitleColor_ infoButtonColor:(UIColor *)infoButtonColor_ maxVisibleSwitches:(int)maxVisibleSwitches_ menuWidth:(CGFloat )menuWidth_ menuIcon:(NSString *)menuIconBase64_ menuButton:(NSString *)menuButtonBase64_ {
-    mainWindow = [UIApplication sharedApplication].keyWindow;
+      // 1. KeyAuth Connect Karein (Apni details inverted commas "" ke andar badlein)
+    // KeyAuthApp.init("Application_Name", "Owner_ID", "Secret", "1.0");
+
+    // 2. Clipboard se key check karne ka system
+    NSString *clipboardText = [UIPasteboard generalPasteboard].string;
+
+    if (clipboardText == nil || [clipboardText isEqualToString:@""]) {
+        // Agar clipboard khali ho to game alert show karega
+        SCLAlertView *alert = [[SCLAlertView alloc] init];
+        [alert showError:@"Authentication Error" subTitle:@"Please copy your key to clipboard before trying to log in." closeButtonTitle:@"Exit" duration:0.0f];
+        return nil; 
+    } else {
+        // Agar key maujood hai to verify karega
+        std::string userKey = [clipboardText UTF8String];
+        // KeyAuthApp.license(userKey);
+    }
+  mainWindow = [UIApplication sharedApplication].keyWindow;
     defaults = [NSUserDefaults standardUserDefaults];
 
     menuWidth = menuWidth_;
